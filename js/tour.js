@@ -273,7 +273,7 @@ function drawMini() {
     if (Math.min(x2 - x1, z2 - z1) > 0.25) continue;
     mctx.fillRect(MX + x1 * MS, MY + z1 * MS, (x2 - x1) * MS, (z2 - z1) * MS);
   }
-  if (level === 2) { mctx.fillStyle = 'rgba(0,135,58,.18)'; mctx.fillRect(MX, MY + 6.4 * MS, 5 * MS, (c.L - 6.4) * MS); }
+  if (level === 2) { mctx.fillStyle = 'rgba(0,135,58,.18)'; mctx.fillRect(MX, MY + 5.8 * MS, 5 * MS, (c.L - 5.8) * MS); }
   mctx.fillStyle = '#00873a'; mctx.font = 'bold 11px sans-serif'; mctx.textAlign = 'center';
   mctx.fillText(level + ' этаж', mini.width / 2, 12);
   const px = MX + pos.x * MS, py = MY + pos.y * MS;
