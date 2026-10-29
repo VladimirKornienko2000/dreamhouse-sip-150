@@ -65,12 +65,24 @@ function tree(x, z, s) {
 }
 [[-7, -4, 1.2], [14, -3, 1.0], [-9, 7, 1.4], [16, 9, 1.3], [-5, 16, 1.1], [13, 17, 1.2], [20, 2, 1.5], [-12, -10, 1.3], [8, -14, 1.1], [-3, 21, 1.0]].forEach(t => tree(...t));
 
+// тёплый свет внутри дома
+function lamp(x, y, z, i, d) { const l = new THREE.PointLight('#fff0d4', i, d, 1.5); l.position.set(x, y, z); scene.add(l); }
+lamp(4.0, 2.7, 1.8, 5, 7);      // тамбур
+lamp(4.0, 4.3, 7.6, 16, 15);    // гостиная
+lamp(6.6, 2.7, 2.7, 5, 8);      // спальня 1 эт.
+lamp(3.2, 5.3, 6.4, 6, 9);      // галерея
+lamp(6.6, 5.4, 3.0, 5, 8);      // спальни 2 эт.
+lamp(6.6, 5.4, 8.0, 5, 8);
+
+let doorClosed = null, doorOpen = null;
+
 // ---------- загрузка ----------
 const loader = new GLTFLoader();
 loader.load('assets/dreamhouse_150.glb', gltf => {
   gltf.scene.traverse(o => {
     if (!o.isMesh) return;
-    if (o.name.includes('door_leaf')) { o.visible = false; return; }
+    if (o.name.includes('door_leaf')) { doorClosed = o; o.castShadow = true; return; }
+    if (o.name.includes('door_open')) { doorOpen = o; o.visible = false; o.castShadow = true; return; }
     const glass = o.name.startsWith('glass');
     o.castShadow = !glass; o.receiveShadow = true;
     if (glass) { o.material.depthWrite = false; o.renderOrder = 2; }
@@ -273,6 +285,19 @@ function drawMini() {
   mctx.fillStyle = '#00873a'; mctx.beginPath(); mctx.arc(px, py, 4, 0, 7); mctx.fill();
 }
 
+function move(f, s, run, dt) {
+  const len = Math.hypot(f, s);
+  if (len > 1) { f /= len; s /= len; }
+  if (len > 0.02) {
+    const sp = (run ? RUN : WALK) * dt;
+    const fx = -Math.sin(yaw), fz = -Math.cos(yaw), rx = Math.cos(yaw), rz = -Math.sin(yaw);
+    const dx = (fx * f + rx * s) * sp, dz = (fz * f + rz * s) * sp;
+    if (!blocked(pos.x + dx, pos.y)) pos.x += dx;
+    if (!blocked(pos.x, pos.y + dz)) pos.y += dz;
+  }
+  floorY(pos.x, pos.y);
+}
+
 // ---------- цикл ----------
 new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0.05 }).observe(rootEl);
 let last = performance.now();
@@ -290,15 +315,11 @@ function frame(now) {
     if (keys.has('ArrowLeft')) yaw += 1.8 * dt;
     if (keys.has('ArrowRight')) yaw -= 1.8 * dt;
     f += -joy.y; s += joy.x;
-    const len = Math.hypot(f, s);
-    if (len > 1) { f /= len; s /= len; }
-    if (len > 0.02) {
-      const sp = (keys.has('ShiftLeft') || keys.has('ShiftRight') ? RUN : WALK) * dt;
-      const fx = -Math.sin(yaw), fz = -Math.cos(yaw), rx = Math.cos(yaw), rz = -Math.sin(yaw);
-      const dx = (fx * f + rx * s) * sp, dz = (fz * f + rz * s) * sp;
-      if (!blocked(pos.x + dx, pos.y)) pos.x += dx;
-      if (!blocked(pos.x, pos.y + dz)) pos.y += dz;
-    }
+    move(f, s, keys.has('ShiftLeft') || keys.has('ShiftRight'), dt);
+  }
+  if (doorClosed && doorOpen) {
+    const near = level === 1 && Math.hypot(pos.x - 4.0, pos.y - 0.1) < 2.6;
+    doorClosed.visible = !near; doorOpen.visible = near;
   }
   const ty = floorY(pos.x, pos.y) + EYE;
   camY += (ty - camY) * Math.min(1, dt * 12);
@@ -308,6 +329,9 @@ function frame(now) {
   drawMini();
 }
 requestAnimationFrame(frame);
+
+// для отладки/проверок
+window.__tour = { get level() { return level; }, get x() { return pos.x; }, get z() { return pos.y; }, get y() { return camY; }, go, walk(f, s, dt) { move(f, s, false, dt); camY = floorY(pos.x, pos.y) + EYE; }, setPos(x, z) { pos.set(x, z); }, setYaw(v) { yaw = v; }, setLevel(v) { level = v; }, get keys() { return keys; }, begin };
 
 // стартовая точка: вид на дом снаружи
 go('out');
