@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ДримХауз — эскизный проект дома 150 м²</title>
+<meta name="description" content="Эскизный проект двухэтажного дома из СИП-панелей на сваях, 150 м²: визуализации, планы этажей и 3D-прогулка по дому.">
+<meta name="theme-color" content="#00873a">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./js/vendor/three.module.min.js", "three/addons/": "./js/vendor/addons/" } }
+</script>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="ДримХауз"><img src="assets/logo_white.png" alt="ДримХауз"></a>
+  <nav>
+    <a href="#viz">Визуализации</a>
+    <a href="#plan">План</a>
+    <a href="#tour">3D-тур</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Эскизный проект</p>
+      <h1>Двухэтажный дом из СИП-панелей на сваях</h1>
+      <p class="lead">150&nbsp;м², кухня-гостиная со вторым светом, четыре спальни и два санузла. Посмотрите дом снаружи, изучите планировку и пройдитесь по комнатам в 3D.</p>
+      <ul class="chips">
+        <li><b>≈149 м²</b> общая площадь</li>
+        <li><b>2 этажа</b> по 2,5 м</li>
+        <li><b>СИП 174 мм</b> стены</li>
+        <li><b>Сваи</b> закрытый цоколь</li>
+        <li><b>8,0 × 10,2 м</b> габариты</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== 1. ВИЗУАЛИЗАЦИИ ===================== -->
+  <section id="viz" class="block">
+    <div class="wrap">
+      <h2><span class="num">1</span> Визуализации</h2>
+      <p class="sub">Дом со всех сторон. Нажмите на изображение, чтобы увеличить.</p>
+
+      <div class="grid g2">
+        <figure><button class="zoom" data-full="assets/render_ne.jpg"><img loading="lazy" src="assets/render_ne.jpg" alt="Вид с северо-востока, вход"></button></figure>
+        <figure><button class="zoom" data-full="assets/render_se.jpg"><img loading="lazy" src="assets/render_se.jpg" alt="Вид с юго-востока"></button></figure>
+        <figure><button class="zoom" data-full="assets/render_sw.jpg"><img loading="lazy" src="assets/render_sw.jpg" alt="Вид с юго-запада"></button></figure>
+        <figure><button class="zoom" data-full="assets/render_nw.jpg"><img loading="lazy" src="assets/render_nw.jpg" alt="Вид с северо-запада"></button></figure>
+      </div>
+
+      <h3>Фасады и разрез</h3>
+      <div class="grid g2">
+        <figure><button class="zoom" data-full="assets/facade_N.png"><img loading="lazy" src="assets/facade_N.png" alt="Северный фасад"></button></figure>
+        <figure><button class="zoom" data-full="assets/facade_S.png"><img loading="lazy" src="assets/facade_S.png" alt="Южный фасад"></button></figure>
+        <figure><button class="zoom" data-full="assets/facade_E.png"><img loading="lazy" src="assets/facade_E.png" alt="Восточный фасад"></button></figure>
+        <figure><button class="zoom" data-full="assets/facade_W.png"><img loading="lazy" src="assets/facade_W.png" alt="Западный фасад"></button></figure>
+      </div>
+      <figure class="wide"><button class="zoom" data-full="assets/section_A.png"><img loading="lazy" src="assets/section_A.png" alt="Разрез A–A через кухню-гостиную"></button></figure>
+    </div>
+  </section>
+
+  <!-- ===================== 2. ПЛАН ===================== -->
+  <section id="plan" class="block alt">
+    <div class="wrap">
+      <h2><span class="num">2</span> Планы этажей</h2>
+      <p class="sub">Север сверху. Наружные стены — СИП 174 мм, несущие внутренние — брус 145 мм, перегородки — каркас 95 мм без утепления.</p>
+      <figure class="wide"><button class="zoom" data-full="assets/plan_floors.png"><img loading="lazy" src="assets/plan_floors.png" alt="Планы 1 и 2 этажей"></button></figure>
+
+      <div class="tables">
+        <div class="card">
+          <h3>1 этаж · 81,6 м²</h3>
+          <table>
+            <tr><td>Кухня-гостиная (второй свет)</td><td>40,0</td></tr>
+            <tr><td>Спальня</td><td>14,6</td></tr>
+            <tr><td>Санузел</td><td>9,5</td></tr>
+            <tr><td>Тамбур</td><td>8,2</td></tr>
+            <tr><td>Техпомещение</td><td>5,0</td></tr>
+            <tr><td>Холл</td><td>4,3</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>2 этаж · 67,8 м²</h3>
+          <table>
+            <tr><td>Спальня 1</td><td>14,6</td></tr>
+            <tr><td>Спальня 2</td><td>14,6</td></tr>
+            <tr><td>Спальня 3</td><td>14,0</td></tr>
+            <tr><td>Санузел</td><td>7,2</td></tr>
+            <tr><td>Коридор</td><td>5,3</td></tr>
+            <tr><td>Галерея над гостиной</td><td>12,1</td></tr>
+          </table>
+          <p class="note">Проём второго света и лестницы: 13,8 м².</p>
+        </div>
+      </div>
+      <p class="note">Площади даны по контуру помещений, без вычета толщины стен. Конструктивные решения (сваи, балки перекрытия, проёмы в несущих стенах) подлежат расчёту.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3. 3D-ТУР ===================== -->
+  <section id="tour" class="block">
+    <div class="wrap">
+      <h2><span class="num">3</span> 3D-тур по дому</h2>
+      <p class="sub">Ходите по дому от первого лица: заходите через тамбур, поднимайтесь по лестнице на второй этаж.</p>
+
+      <div class="tour" id="tour-root">
+        <canvas id="tour-canvas"></canvas>
+
+        <div class="loading" id="tour-loading">Загружаем модель…</div>
+
+        <div class="overlay" id="tour-start">
+          <div class="overlay-box">
+            <img src="assets/logo_green.png" alt="" class="overlay-logo">
+            <p class="desktop-only"><b>Нажмите</b>, чтобы начать прогулку.<br><span>W A S D — ходьба · мышь — осмотр · Shift — быстрее · Esc — выйти</span></p>
+            <p class="touch-only"><b>Коснитесь</b>, чтобы начать.<br><span>Левый джойстик — ходьба · провести по экрану справа — осмотр</span></p>
+            <button class="btn" id="tour-go">Начать прогулку</button>
+          </div>
+        </div>
+
+        <div class="hud" id="tour-hud">
+          <div class="places" id="tour-places">
+            <button data-p="out">Снаружи</button>
+            <button data-p="tambour">Тамбур</button>
+            <button data-p="living">Гостиная</button>
+            <button data-p="kitchen">Кухня</button>
+            <button data-p="bed1">Спальня 1 эт.</button>
+            <button data-p="gallery">2 этаж</button>
+            <button data-p="bed2">Спальня 2 эт.</button>
+          </div>
+          <div class="hud-right">
+            <canvas id="minimap" width="132" height="168"></canvas>
+            <button class="icon-btn" id="tour-fs" title="Во весь экран" aria-label="Во весь экран">⛶</button>
+          </div>
+          <div class="joy touch-only" id="joy"><div class="knob" id="joy-knob"></div></div>
+        </div>
+      </div>
+      <p class="note">Это упрощённая модель для знакомства с планировкой: мебель условная, отделка и инженерные системы не показаны.</p>
+      <p class="dl"><a class="btn ghost" href="assets/dreamhouse_150.glb" download>Скачать 3D-модель (.glb)</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="assets/logo_white.png" alt="ДримХауз">
+    <div>
+      <p><b>ДримХауз</b> — строительство каркасных домов из СИП-панелей в Севастополе и Крыму.</p>
+      <p><a href="https://дримхауз.рф" target="_blank" rel="noopener">дримхауз.рф</a></p>
+      <p class="small">Эскизный проект не является рабочей документацией. Размеры и планировка могут быть скорректированы.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lb" hidden><button class="lb-close" id="lb-close" aria-label="Закрыть">×</button><img id="lb-img" alt=""></div>
+
+<script>
+  // увеличение изображений
+  const lb = document.getElementById('lb'), lbi = document.getElementById('lb-img');
+  document.querySelectorAll('.zoom').forEach(b => b.addEventListener('click', () => { lbi.src = b.dataset.full; lb.hidden = false; document.body.classList.add('noscroll'); }));
+  const closeLb = () => { lb.hidden = true; lbi.src = ''; document.body.classList.remove('noscroll'); };
+  lb.addEventListener('click', e => { if (e.target !== lbi) closeLb(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+</script>
+<script type="module" src="js/tour.js"></script>
+</body>
+</html>
