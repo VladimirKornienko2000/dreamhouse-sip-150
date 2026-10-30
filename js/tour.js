@@ -68,11 +68,15 @@ function tree(x, z, s) {
 // тёплый свет внутри дома
 function lamp(x, y, z, i, d) { const l = new THREE.PointLight('#fff0d4', i, d, 1.5); l.position.set(x, y, z); scene.add(l); }
 lamp(4.0, 2.7, 1.8, 5, 7);      // тамбур
-lamp(4.0, 4.3, 7.6, 16, 15);    // гостиная
+lamp(2.0, 2.7, 7.2, 7, 11);     // гостиная
+lamp(6.4, 2.7, 7.0, 7, 11);     // кухня-столовая
 lamp(6.6, 2.7, 2.7, 5, 8);      // спальня 1 эт.
-lamp(3.2, 5.3, 6.4, 6, 9);      // галерея
-lamp(6.6, 5.4, 3.0, 5, 8);      // спальни 2 эт.
-lamp(6.6, 5.4, 8.0, 5, 8);
+lamp(1.6, 2.6, 2.4, 4, 7);      // санузел 1 эт.
+lamp(2.0, 6.5, 7.0, 14, 16);    // холл 2 эт. (под скатом)
+lamp(1.4, 5.0, 2.2, 5, 8);      // спальня 1 (2 эт.)
+lamp(6.6, 5.0, 2.4, 5, 8);      // спальня 2
+lamp(5.9, 5.0, 7.0, 7, 10);     // спальня 3
+lamp(4.0, 4.6, 1.4, 4, 6);      // санузел 2 эт.
 
 let doorClosed = null, doorOpen = null;
 
@@ -226,11 +230,11 @@ document.getElementById('tour-go').addEventListener('click', e => { e.stopPropag
 const PLACES = {
   out:     { x: 4.0, z: -12.5, lv: 1, yaw: Math.PI },
   tambour: { x: 4.0, z: 1.4,  lv: 1, yaw: Math.PI },
-  living:  { x: 4.0, z: 4.6,  lv: 1, yaw: Math.PI },
-  kitchen: { x: 6.7, z: 8.9,  lv: 1, yaw: Math.PI / 2 + 0.4 },
-  bed1:    { x: 6.6, z: 4.3,  lv: 1, yaw: 0.25 },
-  gallery: { x: 3.0, z: 6.5,  lv: 2, yaw: Math.PI },
-  bed2:    { x: 6.6, z: 4.4,  lv: 2, yaw: 0.3 },
+  living:  { x: 3.4, z: 5.5,  lv: 1, yaw: Math.PI },
+  kitchen: { x: 4.4, z: 6.2,  lv: 1, yaw: -Math.PI / 2 + 0.25 },
+  bed1:    { x: 6.6, z: 4.0,  lv: 1, yaw: 0.25 },
+  gallery: { x: 2.4, z: 5.6,  lv: 2, yaw: Math.PI + 0.3 },
+  bed2:    { x: 6.6, z: 4.2,  lv: 2, yaw: 0.3 },
 };
 function go(name) {
   if (!ready) return;
@@ -273,7 +277,7 @@ function drawMini() {
     if (Math.min(x2 - x1, z2 - z1) > 0.25) continue;
     mctx.fillRect(MX + x1 * MS, MY + z1 * MS, (x2 - x1) * MS, (z2 - z1) * MS);
   }
-  if (level === 2) { mctx.fillStyle = 'rgba(0,135,58,.18)'; mctx.fillRect(MX, MY + 5.8 * MS, 5 * MS, (c.L - 5.8) * MS); }
+  if (level === 2) { mctx.fillStyle = 'rgba(0,135,58,.25)'; mctx.fillRect(MX + c.STAIR.x1 * MS, MY + c.STAIR.y_top * MS, (c.STAIR.x2 - c.STAIR.x1) * MS, (7.8 - c.STAIR.y_top) * MS); }
   mctx.fillStyle = '#00873a'; mctx.font = 'bold 11px sans-serif'; mctx.textAlign = 'center';
   mctx.fillText(level + ' этаж', mini.width / 2, 12);
   const px = MX + pos.x * MS, py = MY + pos.y * MS;
