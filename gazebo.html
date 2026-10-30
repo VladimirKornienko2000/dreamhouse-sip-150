@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ДримХауз — беседка 3×3 м</title>
+<meta name="description" content="Эскизный проект деревянной беседки 3×3 м с вальмовой кровлей: визуализации, план, фасады и 3D-модель с облётом камеры.">
+<meta name="theme-color" content="#00873a">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="gazebo.css">
+<script type="importmap">
+{ "imports": { "three": "./js/vendor/three.module.min.js", "three/addons/": "./js/vendor/addons/" } }
+</script>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="ДримХауз"><img src="assets/logo_white.png" alt="ДримХауз"></a>
+  <nav>
+    <a href="#viz">Визуализации</a>
+    <a href="#plan">План</a>
+    <a href="#model">3D-модель</a>
+  </nav>
+  <a class="tel" href="tel:+79785184695"><span class="tel-ic">&#9742;</span><span class="tel-num">+7 (978) 518-46-95</span></a>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Эскизный проект</p>
+      <h1>Деревянная беседка 3×3 м с вальмовой кровлей</h1>
+      <p class="lead">Открытая беседка на настиле: глухая западная стена из реек, северная стена с панорамным проёмом, вход с юга и открытая восточная сторона. Высота 2,2&nbsp;м от настила до балки.</p>
+      <ul class="chips">
+        <li><b>3 × 3 м</b> габарит, 9 м² настила</li>
+        <li><b>2,2 м</b> до балки опоры кровли</li>
+        <li><b>≈3,35 м</b> общая высота</li>
+        <li><b>Вальма 25°</b> мягкая кровля</li>
+        <li><b>Брус 150×150</b> стойки</li>
+      </ul>
+      <p class="hero-cta"><a class="btn" href="#model">Смотреть в 3D</a></p>
+    </div>
+  </section>
+
+  <!-- ===================== 1. ВИЗУАЛИЗАЦИИ ===================== -->
+  <section id="viz" class="block">
+    <div class="wrap">
+      <h2><span class="num">1</span> Визуализации</h2>
+      <p class="sub">Беседка с разных сторон. Нажмите на изображение, чтобы увеличить.</p>
+
+      <div class="grid g2">
+        <figure><button class="zoom" data-full="assets/gazebo_render_se.jpg"><img loading="lazy" src="assets/gazebo_render_se.jpg" alt="Вид с юго-востока, вход"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_render_sw.jpg"><img loading="lazy" src="assets/gazebo_render_sw.jpg" alt="Вид с юго-запада"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_render_ne.jpg"><img loading="lazy" src="assets/gazebo_render_ne.jpg" alt="Вид с северо-востока"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_render_nw.jpg"><img loading="lazy" src="assets/gazebo_render_nw.jpg" alt="Вид с северо-запада"></button></figure>
+      </div>
+
+      <h3>Фасады и разрез</h3>
+      <div class="grid g2">
+        <figure><button class="zoom" data-full="assets/gazebo_facade_S.svg"><img loading="lazy" src="assets/gazebo_facade_S.svg" alt="Южный фасад (вход)"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_facade_N.svg"><img loading="lazy" src="assets/gazebo_facade_N.svg" alt="Северный фасад"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_facade_E.svg"><img loading="lazy" src="assets/gazebo_facade_E.svg" alt="Восточный фасад"></button></figure>
+        <figure><button class="zoom" data-full="assets/gazebo_facade_W.svg"><img loading="lazy" src="assets/gazebo_facade_W.svg" alt="Западный фасад"></button></figure>
+      </div>
+      <figure class="wide"><button class="zoom" data-full="assets/gazebo_section_A.svg"><img loading="lazy" src="assets/gazebo_section_A.svg" alt="Разрез A–A"></button></figure>
+    </div>
+  </section>
+
+  <!-- ===================== 2. ПЛАН ===================== -->
+  <section id="plan" class="block alt">
+    <div class="wrap">
+      <h2><span class="num">2</span> План и размеры</h2>
+      <p class="sub">Север сверху. Стойки — брус 150×150, западная и часть северной стены — горизонтальная рейка, южная и восточная стороны открыты.</p>
+      <figure class="wide"><button class="zoom" data-full="assets/gazebo_plan.svg"><img loading="lazy" src="assets/gazebo_plan.svg" alt="План беседки 3×3 м"></button></figure>
+
+      <div class="tables">
+        <div class="card">
+          <h3>Основные размеры</h3>
+          <table>
+            <tr><td>Габарит по стойкам</td><td>3,0 × 3,0 м</td></tr>
+            <tr><td>Площадь настила</td><td>9,0 м²</td></tr>
+            <tr><td>Настил → низ балки</td><td>2,20 м</td></tr>
+            <tr><td>Низ балки от земли</td><td>2,35 м</td></tr>
+            <tr><td>Высота до конька</td><td>≈3,35 м</td></tr>
+            <tr><td>Кровля по свесам</td><td>3,8 × 3,8 м</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Конструкция (предварительно)</h3>
+          <table>
+            <tr><td>Стойки, 5 шт.</td><td>150 × 150</td></tr>
+            <tr><td>Обвязочная балка</td><td>150 × 200</td></tr>
+            <tr><td>Настил: доска</td><td>140 × 28</td></tr>
+            <tr><td>Рейка стен, шаг 110</td><td>90 × 20</td></tr>
+            <tr><td>Полустена, проём над ней</td><td>1000, 1200</td></tr>
+            <tr><td>Уклон кровли, свес</td><td>25°, 400</td></tr>
+          </table>
+        </div>
+      </div>
+      <p class="note">Размеры в таблицах — в миллиметрах, если не указано иное. Сечения и материалы приняты предварительно по образу беседки-референса; основание, узлы и стропильная система подлежат расчёту.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3. 3D-МОДЕЛЬ ===================== -->
+  <section id="model" class="block">
+    <div class="wrap">
+      <h2><span class="num">3</span> 3D-модель с облётом</h2>
+      <p class="sub">Камера сама облетает беседку и показывает её со всех сторон. Можно остановить облёт, повернуть модель мышью или пальцем, приблизить колесом или щипком, выбрать вид кнопками и убрать крышу.</p>
+
+      <div class="tour g3d" id="g-root">
+        <canvas id="g-canvas"></canvas>
+
+        <div class="g-fail" id="g-fail" hidden>Не удалось запустить 3D в этом браузере. Попробуйте открыть страницу в актуальном Chrome, Safari или Firefox.</div>
+
+        <div class="hud" id="g-hud">
+          <div class="g-top">
+            <div class="g-ctrl">
+              <button class="chip-btn on" id="g-auto">⏸ Облёт</button>
+              <button class="chip-btn" id="g-speed">Скорость ×1</button>
+              <button class="chip-btn on" id="g-roof">Крыша: вкл</button>
+            </div>
+            <div class="hud-right">
+              <canvas id="g-compass" width="132" height="132"></canvas>
+              <button class="icon-btn" id="g-fs" title="Во весь экран" aria-label="Во весь экран">⛶</button>
+            </div>
+          </div>
+          <div class="places" id="g-places">
+            <button data-v="s">Фасад (юг)</button>
+            <button data-v="se">Юго-восток</button>
+            <button data-v="ne">Северо-восток</button>
+            <button data-v="nw">Северо-запад</button>
+            <button data-v="sw">Юго-запад</button>
+            <button data-v="top">Сверху</button>
+          </div>
+        </div>
+      </div>
+      <p class="note">Модель упрощённая: показаны конструкции, окружение и растения условные, фундамент и отделка не детализированы.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 4. СМЕТА (будет добавлена позже) ===================== -->
+
+  <section id="contacts" class="block alt">
+    <div class="wrap cta">
+      <div>
+        <h2 class="cta-h">Нужна такая беседка?</h2>
+        <p class="sub" style="margin:0">Подберём размеры и материалы под ваш участок, посчитаем стоимость и сроки.</p>
+      </div>
+      <a class="btn big" href="tel:+79785184695">Позвонить: +7 (978) 518-46-95</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="assets/logo_white.png" alt="ДримХауз">
+    <div>
+      <p><b>ДримХауз</b> — строительство каркасных домов из СИП-панелей в Севастополе и Крыму.</p>
+      <p>Телефон: <a href="tel:+79785184695"><b>+7 (978) 518-46-95</b></a></p>
+      <p><a href="https://дримхауз.рф" target="_blank" rel="noopener">дримхауз.рф</a> · <a href="./">Эскизный проект дома 150 м²</a></p>
+      <p class="small">Эскизный проект не является рабочей документацией. Размеры и конструкция могут быть скорректированы.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lb" hidden><button class="lb-close" id="lb-close" aria-label="Закрыть">×</button><img id="lb-img" alt=""></div>
+
+<script>
+  // увеличение изображений
+  const lb = document.getElementById('lb'), lbi = document.getElementById('lb-img');
+  document.querySelectorAll('.zoom').forEach(b => b.addEventListener('click', () => { lbi.src = b.dataset.full; lb.hidden = false; document.body.classList.add('noscroll'); }));
+  const closeLb = () => { lb.hidden = true; lbi.src = ''; document.body.classList.remove('noscroll'); };
+  lb.addEventListener('click', e => { if (e.target !== lbi) closeLb(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+</script>
+<script type="module" src="js/gazebo.js"></script>
+</body>
+</html>
