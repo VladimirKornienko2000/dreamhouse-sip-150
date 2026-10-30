@@ -5,8 +5,7 @@
 .zoom img[src$=".svg"]{background:#fff}
 
 /* 3D-вьюер с облётом */
-.tour.g3d{cursor:grab;background:#cfe4ea}
-.tour.g3d.drag{cursor:grabbing}
+.tour.g3d{cursor:default;background:#cfe4ea;touch-action:auto}
 .g3d .hud{display:flex;flex-direction:column;justify-content:space-between;padding:12px;pointer-events:none}
 .g3d .hud[hidden]{display:none}
 .g3d .hud>*{pointer-events:none}
@@ -20,7 +19,7 @@
 #g-compass{width:96px;height:96px;background:rgba(255,255,255,.9);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .g-fail{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;background:var(--alt);color:var(--muted);font-weight:600;z-index:5}
 .g-fail[hidden]{display:none}
-.g3d canvas#g-canvas{touch-action:none}
+.g3d canvas#g-canvas{touch-action:auto;pointer-events:none}
 
 @media (max-width:760px){
   .g3d .places{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;max-width:100%}

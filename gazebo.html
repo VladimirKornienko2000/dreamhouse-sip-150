@@ -105,7 +105,7 @@
   <section id="model" class="block">
     <div class="wrap">
       <h2><span class="num">3</span> 3D-модель с облётом</h2>
-      <p class="sub">Камера сама облетает беседку и показывает её со всех сторон. Можно остановить облёт, повернуть модель мышью или пальцем, приблизить колесом или щипком, выбрать вид кнопками и убрать крышу.</p>
+      <p class="sub">Камера сама облетает беседку по кругу и показывает её со всех сторон. Кнопкой можно убрать крышу и посмотреть конструкцию.</p>
 
       <div class="tour g3d" id="g-root">
         <canvas id="g-canvas"></canvas>
@@ -115,22 +115,12 @@
         <div class="hud" id="g-hud">
           <div class="g-top">
             <div class="g-ctrl">
-              <button class="chip-btn on" id="g-auto">⏸ Облёт</button>
-              <button class="chip-btn" id="g-speed">Скорость ×1</button>
               <button class="chip-btn on" id="g-roof">Крыша: вкл</button>
             </div>
             <div class="hud-right">
               <canvas id="g-compass" width="132" height="132"></canvas>
               <button class="icon-btn" id="g-fs" title="Во весь экран" aria-label="Во весь экран">⛶</button>
             </div>
-          </div>
-          <div class="places" id="g-places">
-            <button data-v="s">Фасад (юг)</button>
-            <button data-v="se">Юго-восток</button>
-            <button data-v="ne">Северо-восток</button>
-            <button data-v="nw">Северо-запад</button>
-            <button data-v="sw">Юго-запад</button>
-            <button data-v="top">Сверху</button>
           </div>
         </div>
       </div>

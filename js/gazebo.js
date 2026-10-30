@@ -408,15 +408,20 @@ const culls = [];   // деревья и кусты: прячем, если за
   }
 }
 
-// ---------- камера: только облёт ----------
-const TARGET = new THREE.Vector3(0, 1.45, 0);
-const view = { th: 0.6, ph: 0.34, r: 10.5 };
-const PH_MIN = 0.06, PH_MAX = 1.5, R_MIN = 5.5, R_MAX = 18;
-let autoEnabled = true;       // кнопка «Облёт»
-let idleTimer = 0;            // пауза после ручного движения
-let tween = null;
-let speed = 1;
+// ---------- камера: только автоматический облёт ----------
+// Точка, вокруг которой летит камера, — геометрический центр беседки вместе с крышей
+// (по высоте 0…3,35 м), поэтому беседка всегда остаётся в центре кадра.
+const TARGET = new THREE.Vector3(0, 1.6, 0);
+const SPHERE = 3.0;                       // радиус сферы, описанной вокруг беседки с кровлей
+const ELEV = 0.3;                         // постоянный угол места камеры
+const view = { th: 0.6, ph: ELEV, r: 12 };
+let fitR = 12;                            // расстояние, при котором беседка занимает ~80% кадра
 
+function updateFit() {
+  const vf = camera.fov * Math.PI / 180;
+  const hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
+  fitR = SPHERE / Math.sin(Math.min(vf, hf) / 2) * 1.08;
+}
 function applyCamera() {
   const c = Math.cos(view.ph);
   camera.position.set(
@@ -427,75 +432,12 @@ function applyCamera() {
   camera.lookAt(TARGET);
 }
 
-const PRESETS = {
-  s:  { th: 0,               ph: 0.16, r: 10.5 },
-  se: { th: Math.PI / 4,     ph: 0.3,  r: 10 },
-  ne: { th: 3 * Math.PI / 4, ph: 0.3,  r: 10 },
-  nw: { th: -3 * Math.PI / 4, ph: 0.3, r: 10 },
-  sw: { th: -Math.PI / 4,    ph: 0.3,  r: 10 },
-  top: { th: 0,              ph: 1.45, r: 13 }
-};
-function goTo(name) {
-  const p = PRESETS[name]; if (!p) return;
-  let d = p.th - view.th; d = Math.atan2(Math.sin(d), Math.cos(d));    // кратчайший поворот
-  tween = { t: 0, dur: 1.3, from: { ...view }, to: { th: view.th + d, ph: p.ph, r: p.r } };
-  setAuto(false);
-  document.querySelectorAll('#g-places [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === name));
-}
-function setAuto(on) {
-  autoEnabled = on;
-  const b = document.getElementById('g-auto');
-  b.classList.toggle('on', on);
-  b.textContent = on ? '⏸ Облёт' : '▶ Облёт';
-  if (on) { tween = null; document.querySelectorAll('#g-places [data-v]').forEach(x => x.classList.remove('on')); }
-}
-const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-// ручное управление (вращение + приближение)
-const ptrs = new Map();
-let lastPinch = 0;
-canvas.addEventListener('pointerdown', e => {
-  canvas.setPointerCapture(e.pointerId);
-  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  tween = null; idleTimer = 3;
-  rootEl.classList.add('drag');
-  if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; lastPinch = Math.hypot(a.x - b.x, a.y - b.y); }
-});
-canvas.addEventListener('pointermove', e => {
-  const p = ptrs.get(e.pointerId); if (!p) return;
-  const dx = e.clientX - p.x, dy = e.clientY - p.y;
-  p.x = e.clientX; p.y = e.clientY;
-  idleTimer = 3;
-  if (ptrs.size === 1) {
-    view.th -= dx * 0.0052;
-    view.ph = Math.min(PH_MAX, Math.max(PH_MIN, view.ph + dy * 0.0042));
-  } else if (ptrs.size === 2) {
-    const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y);
-    view.r = Math.min(R_MAX, Math.max(R_MIN, view.r * (lastPinch / d))); lastPinch = d;
-  }
-});
-const endPtr = e => { ptrs.delete(e.pointerId); if (!ptrs.size) rootEl.classList.remove('drag'); };
-canvas.addEventListener('pointerup', endPtr);
-canvas.addEventListener('pointercancel', endPtr);
-canvas.addEventListener('wheel', e => {
-  e.preventDefault();
-  view.r = Math.min(R_MAX, Math.max(R_MIN, view.r * (1 + Math.sign(e.deltaY) * 0.08)));
-  idleTimer = 3; tween = null;
-}, { passive: false });
-
-// кнопки
-document.getElementById('g-auto').addEventListener('click', () => setAuto(!autoEnabled));
-document.querySelectorAll('#g-places [data-v]').forEach(b => b.addEventListener('click', () => goTo(b.dataset.v)));
+// кнопки: только крыша и полный экран
 const roofBtn = document.getElementById('g-roof');
 roofBtn.addEventListener('click', () => {
   roofGroup.visible = !roofGroup.visible;
   roofBtn.classList.toggle('on', roofGroup.visible);
   roofBtn.textContent = roofGroup.visible ? 'Крыша: вкл' : 'Крыша: выкл';
-});
-const speedBtn = document.getElementById('g-speed');
-speedBtn.addEventListener('click', () => {
-  speed = speed === 1 ? 2 : speed === 2 ? 0.5 : 1;
-  speedBtn.textContent = speed === 1 ? 'Скорость ×1' : `Скорость ×${speed}`;
 });
 document.getElementById('g-fs').addEventListener('click', () => toggleFs());
 function toggleFs(force) {
@@ -546,33 +488,24 @@ function resize() {
   // на узких экранах — шире угол, чтобы беседка помещалась
   camera.fov = w / h < 0.9 ? 52 : w / h < 1.3 ? 44 : 36;
   camera.updateProjectionMatrix();
+  updateFit();
+  applyCamera();
+  renderer.render(scene, camera);   // сразу перерисовываем, чтобы не было пустого кадра после изменения размера
 }
 new ResizeObserver(resize).observe(rootEl);
 resize();
 
-let visible = true, last = performance.now(), clock = 0;
+let visible = true, last = performance.now();
 new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0.05 }).observe(rootEl);
 
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
   if (!visible || document.hidden) return;
-  clock += dt;
-  if (tween) {
-    tween.t += dt / tween.dur;
-    const k = ease(Math.min(1, tween.t));
-    view.th = tween.from.th + (tween.to.th - tween.from.th) * k;
-    view.ph = tween.from.ph + (tween.to.ph - tween.from.ph) * k;
-    view.r = tween.from.r + (tween.to.r - tween.from.r) * k;
-    if (tween.t >= 1) tween = null;
-  } else if (autoEnabled && !stillMode) {
-    if (idleTimer > 0) idleTimer -= dt;
-    else {
-      view.th += dt * 0.13 * speed;                                   // полный круг ≈ 48 с
-      const wob = Math.sin(clock * 0.22 * speed);
-      view.ph += ((0.30 + 0.12 * wob) - view.ph) * Math.min(1, dt * 1.2);
-      view.r += ((10.4 + 1.3 * Math.sin(clock * 0.15 * speed)) - view.r) * Math.min(1, dt * 1.2);
-    }
+  if (!stillMode) {
+    view.th += dt * 0.14;                                          // полный круг ≈ 45 с
+    view.ph = ELEV;
+    view.r += (fitR - view.r) * Math.min(1, dt * 3);               // плавно подстраиваем под размер экрана
   }
   applyCamera();
   updateCulls();
@@ -582,11 +515,11 @@ function frame(now) {
 
 // режим для статичных кадров (?still) — используется при подготовке картинок
 const stillMode = new URLSearchParams(location.search).has('still');
-if (stillMode) setAuto(false);
 window.gazebo3d = {
-  setView(th, ph, r) { view.th = th; view.ph = ph; view.r = r; tween = null; applyCamera(); updateCulls(); renderer.render(scene, camera); },
+  setView(th, ph, r) { view.th = th; view.ph = ph; view.r = r; applyCamera(); updateCulls(); renderer.render(scene, camera); },
   setRoof(v) { roofGroup.visible = v; },
   get view() { return { ...view }; },
+  get fit() { return fitR; },
   resize
 };
 
