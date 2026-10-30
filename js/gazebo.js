@@ -14,23 +14,23 @@ const isTouch = matchMedia('(pointer: coarse)').matches;
 
 // ---------- параметры конструкции ----------
 const W = 3.0;                 // габарит по внешним граням стоек
-const POST = 0.15;             // брус 150×150
-const DECK = 0.15;             // отметка настила
+const POST = 0.10;             // брус 100×100 (по смете)
+const DECK = 0.30;             // отметка настила: пирог пола 225 мм + ~75 мм на опоры
 const CLEAR = 2.2;             // настил → низ обвязочной балки
-const BEAM_H = 0.2, BEAM_B = 0.15;
-const EAVE = 0.4;              // свес кровли
+const BEAM_H = 0.10, BEAM_B = 0.10;   // обвязка — брус 100×100
+const EAVE = 0.6;              // свес кровли (даёт ≈21–22 м² черепицы со сметы)
 const PITCH = 25 * Math.PI / 180;
 const T = Math.tan(PITCH);
 const Y_BEAM_BOT = DECK + CLEAR;            // 2.35
 const Y_BEAM_TOP = Y_BEAM_BOT + BEAM_H;     // 2.55
-const Y_ROOF_AT_WALL = Y_BEAM_TOP + 0.10;   // 2.65
+const Y_ROOF_AT_WALL = Y_BEAM_TOP + 0.19;   // стропило 150 + обрешётка 25 + черепица
 const R_OUT = W / 2 + EAVE;                 // 1.9
 const Y_EAVE = Y_ROOF_AT_WALL - EAVE * T;   // ~2.463
 const Y_APEX = Y_EAVE + R_OUT * T;          // ~3.349
 const HALF_WALL = 1.0;                      // низ проёма над настилом
-const MID_X = -0.425;                       // промежуточная стойка северной стены
-const SLAT = 0.09, SLAT_T = 0.022;
-const PC = W / 2 - POST / 2;                // 1.425 — ось угловых стоек
+const MID_X = -0.45;                        // промежуточная стойка северной стены
+const SLAT = 0.096, SLAT_T = 0.02;       // планкен 20×96
+const PC = W / 2 - POST / 2;                // 1.45 — ось угловых стоек
 
 // ---------- three ----------
 let renderer;
@@ -185,22 +185,24 @@ function beamBetween(a, b, w, h, m, parent) {
   parent.add(mesh);
 }
 
-// ---------- настил на лагах ----------
-box(W - 0.08, 0.10, W - 0.08, mFrame, 0, DECK - 0.028 - 0.05, 0);                 // обвязка/лаги
-for (let i = 0; i < 4; i++) box(0.05, 0.12, W - 0.1, mFrame, -1.2 + i * 0.8, DECK - 0.028 - 0.06, 0);
+// ---------- настил на лагах (по смете) ----------
+// чистовой пол 50×150 → черновой 25×100 → лаги 50×150 (7 шт.) на опорах
+for (let i = 0; i < 7; i++) box(0.05, 0.15, W - 0.02, mFrame, -1.45 + i * (2.9 / 6), DECK - 0.075 - 0.075, 0);
+box(W - 0.04, 0.025, W - 0.04, mFrame, 0, DECK - 0.05 - 0.0125, 0);                 // черновой пол
+for (const x of [-1.3, 0, 1.3]) for (const z of [-1.3, 0, 1.3]) box(0.12, DECK - 0.225, 0.12, mFrame, x, (DECK - 0.225) / 2, z);   // опоры (фундамент не в смете)
 {
-  const n = 20, gap = 0.006, bw = (W - gap * (n - 1)) / n;
+  const n = 20, gap = 0.003, bw = (W - gap * (n - 1)) / n;
   for (let i = 0; i < n; i++) {
     const z = -W / 2 + bw / 2 + i * (bw + gap);
     const m = mDeck.clone(); m.color.setScalar(rr(0.82, 1.05));
-    box(W, 0.028, bw, m, 0, DECK - 0.014, z);
+    box(W, 0.05, bw, m, 0, DECK - 0.025, z);
   }
 }
 // торцевая доска по периметру (фартук)
-box(W + 0.02, 0.13, 0.03, mFrame, 0, DECK - 0.065, W / 2 + 0.005);
-box(W + 0.02, 0.13, 0.03, mFrame, 0, DECK - 0.065, -W / 2 - 0.005);
-box(0.03, 0.13, W + 0.02, mFrame, W / 2 + 0.005, DECK - 0.065, 0);
-box(0.03, 0.13, W + 0.02, mFrame, -W / 2 - 0.005, DECK - 0.065, 0);
+box(W + 0.02, 0.225, 0.025, mFrame, 0, DECK - 0.1125, W / 2 + 0.005);
+box(W + 0.02, 0.225, 0.025, mFrame, 0, DECK - 0.1125, -W / 2 - 0.005);
+box(0.025, 0.225, W + 0.02, mFrame, W / 2 + 0.005, DECK - 0.1125, 0);
+box(0.025, 0.225, W + 0.02, mFrame, -W / 2 - 0.005, DECK - 0.1125, 0);
 
 // ---------- стойки (5 шт.) ----------
 const postH = Y_BEAM_BOT - DECK;
@@ -215,11 +217,11 @@ box(W, BEAM_H, BEAM_B, mBeam, 0, by, PC);
 box(BEAM_B, BEAM_H, W - 2 * BEAM_B, mBeam, -PC, by, 0);
 box(BEAM_B, BEAM_H, W - 2 * BEAM_B, mBeam, PC, by, 0);
 // потолочные балки поперёк (запад—восток)
-for (const z of [-0.75, 0, 0.75]) box(W - 2 * BEAM_B, 0.15, 0.09, mBeam, 0, Y_BEAM_TOP - 0.075, z);
+for (const z of [-0.75, 0, 0.75]) box(W - 2 * BEAM_B, 0.10, 0.10, mBeam, 0, Y_BEAM_TOP - 0.05, z);
 
 // ---------- стены из реек ----------
 const slatYs = [];
-{ let y = DECK; while (y + SLAT <= Y_BEAM_BOT + 0.001) { slatYs.push(y); y += y >= 1.55 ? 0.15 : 0.11; } }
+{ let y = DECK; while (y + SLAT <= Y_BEAM_BOT + 0.001) { slatYs.push(y); y += y >= DECK + 1.4 ? 0.15 : 0.11; } }
 
 function slatsAlongX(x0, x1, z, ys) {      // рейки вдоль x
   const len = x1 - x0, cx = (x0 + x1) / 2;
@@ -249,25 +251,25 @@ box(inner - (MID_X + POST / 2), 0.06, 0.06, mBeam, (MID_X + POST / 2 + inner) / 
 
   const under = new THREE.Mesh(new THREE.ConeGeometry(R, H, 4, 1, true), mUnder);
   under.rotation.y = Math.PI / 4;
-  under.position.y = Y_EAVE + H / 2 - 0.085;
+  under.position.y = Y_EAVE + H / 2 - 0.19;
   under.receiveShadow = true;
   under.material.side = THREE.DoubleSide;
   roofGroup.add(under);
 
   // фасадная доска по краю свеса
-  const fy = Y_EAVE - 0.07, fl = R_OUT * 2 + 0.03;
-  box(fl, 0.2, 0.035, mBeam, 0, fy, R_OUT - 0.005, roofGroup);
-  box(fl, 0.2, 0.035, mBeam, 0, fy, -R_OUT + 0.005, roofGroup);
-  box(0.035, 0.2, fl, mBeam, R_OUT - 0.005, fy, 0, roofGroup);
-  box(0.035, 0.2, fl, mBeam, -R_OUT + 0.005, fy, 0, roofGroup);
+  const fy = Y_EAVE - 0.09, fl = R_OUT * 2 + 0.03;
+  box(fl, 0.22, 0.035, mBeam, 0, fy, R_OUT - 0.005, roofGroup);
+  box(fl, 0.22, 0.035, mBeam, 0, fy, -R_OUT + 0.005, roofGroup);
+  box(0.035, 0.22, fl, mBeam, R_OUT - 0.005, fy, 0, roofGroup);
+  box(0.035, 0.22, fl, mBeam, -R_OUT + 0.005, fy, 0, roofGroup);
 
   // угловые стропила снизу
-  const apex = new THREE.Vector3(0, Y_APEX - 0.19, 0);
+  const apex = new THREE.Vector3(0, Y_APEX - 0.22, 0);
   for (const [sx, sz] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
-    beamBetween(new THREE.Vector3(sx * 1.5, Y_APEX - 1.5 * T - 0.17, sz * 1.5), apex, 0.08, 0.12, mBeam, roofGroup);
+    beamBetween(new THREE.Vector3(sx * 1.5, Y_APEX - 1.5 * T - 0.17, sz * 1.5), apex, 0.05, 0.15, mBeam, roofGroup);
   }
   // коньковый кронштейн
-  box(0.14, 0.14, 0.14, mBeam, 0, Y_APEX - 0.25, 0, roofGroup);
+  box(0.12, 0.12, 0.12, mBeam, 0, Y_APEX - 0.28, 0, roofGroup);
 }
 
 // ---------- щебень, дорожка из плитки ----------
@@ -411,8 +413,8 @@ const culls = [];   // деревья и кусты: прячем, если за
 // ---------- камера: только автоматический облёт ----------
 // Точка, вокруг которой летит камера, — геометрический центр беседки вместе с крышей
 // (по высоте 0…3,35 м), поэтому беседка всегда остаётся в центре кадра.
-const TARGET = new THREE.Vector3(0, 1.6, 0);
-const SPHERE = 3.0;                       // радиус сферы, описанной вокруг беседки с кровлей
+const TARGET = new THREE.Vector3(0, 1.75, 0);
+const SPHERE = 3.3;                       // радиус сферы, описанной вокруг беседки с кровлей
 const ELEV = 0.3;                         // постоянный угол места камеры
 const view = { th: 0.6, ph: ELEV, r: 12 };
 let fitR = 12;                            // расстояние, при котором беседка занимает ~80% кадра
